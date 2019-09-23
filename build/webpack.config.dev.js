@@ -6,7 +6,7 @@ var MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CopywebpackPlugin = require('copy-webpack-plugin')
 
 const cesiumSource = 'node_modules/cesium/Source'
-const cesiumWorkers = 'Build/Cesium/Workers'
+const cesiumWorkers = '../Build/Cesium/Workers'
 
 module.exports = {
   devtool: 'cheap-module-source-map',
@@ -15,7 +15,7 @@ module.exports = {
   output: {
     sourcePrefix: '',
     filename: 'bundle.js',
-    path: path.resolve(__dirname, '/../myworld'),
+    path: path.resolve(__dirname, '../myworld'),
     publicPath: '/' // 必须配置
   },
   amd: {
@@ -93,7 +93,7 @@ module.exports = {
     }),
     new webpack.DefinePlugin({
       // Define relative base path in cesium for loading assets
-      CESIUM_BASE_URL: JSON.stringify('')
+      CESIUM_BASE_URL: JSON.stringify('../myworld')
     }),
     new webpack.HotModuleReplacementPlugin(),
     new MiniCssExtractPlugin({
@@ -101,24 +101,26 @@ module.exports = {
       chunkFilename: '[id].css'
     }),
     new webpack.ProgressPlugin(function (percentage, message, ...args) {
-      //   console.info(message + (percentage * 100).toFixed(2) + '%' + '. ' + args.join(','))
+    //   console.info(message + (percentage * 100).toFixed(2) + '%')
     }),
     // Copy Cesium Assets, Widgets, and Workers to a static directory
-    new CopywebpackPlugin([{ from: path.join(cesiumSource, cesiumWorkers), to: 'Workers' }]),
-    new CopywebpackPlugin([{ from: path.join(cesiumSource, 'Assets'), to: 'Assets' }]),
-    new CopywebpackPlugin([{ from: path.join(cesiumSource, 'Widgets'), to: 'Widgets' }])
+    new CopywebpackPlugin([{ from: path.join(cesiumSource, cesiumWorkers), to: './myworld/Workers' }]),
+    new CopywebpackPlugin([{ from: path.join('node_modules/cesium/Build/Cesium/ThirdParty', './'), to: './myworld/ThirdParty' }]),
+    new CopywebpackPlugin([{ from: path.join(cesiumSource, 'Assets'), to: './myworld/Assets' }]),
+    new CopywebpackPlugin([{ from: path.join(cesiumSource, 'Widgets'), to: './myworld/Widgets' }])
   ],
   resolve: {
     extensions: ['.js', '.jsx', 'ts', 'tsx'],
     alias: {
       '@': path.resolve(__dirname, '../src'),
-      cesium: path.resolve(__dirname, '../', cesiumSource)
+      cesium: path.resolve(cesiumSource)
     }
   },
   devServer: {
     inline: true,
     hot: true,
     port: 8888,
+    // contentBase: path.join(__dirname, '../'),
     historyApiFallback: {
       index: '/index.html'
     }, // react router要配置
