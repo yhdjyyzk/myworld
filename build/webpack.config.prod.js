@@ -3,6 +3,10 @@ var webpack = require('webpack')
 var { CleanWebpackPlugin } = require('clean-webpack-plugin')
 var htmlWebpackPlugin = require('html-webpack-plugin')
 var MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const CopywebpackPlugin = require('copy-webpack-plugin')
+
+const cesiumSource = 'node_modules/cesium/Source'
+const cesiumWorkers = '../Build/Cesium/Workers'
 
 module.exports = {
   devtool: 'source-map',
@@ -12,6 +16,14 @@ module.exports = {
     filename: 'bundle.js',
     path: path.resolve(__dirname, '../dist/myworld'),
     publicPath: '/myworld'
+  },
+  amd: {
+    // Enable webpack-friendly use of require in Cesium
+    toUrlUndefined: true
+  },
+  node: {
+    // Resolve node module use of fs
+    fs: 'empty'
   },
   module: {
     rules: [
@@ -73,22 +85,27 @@ module.exports = {
       filename: 'index.html',
       template: path.resolve(__dirname, '../src/index.html')
     }),
-    new webpack.HotModuleReplacementPlugin(),
     new MiniCssExtractPlugin({
       filename: '[name].css',
       chunkFilename: '[id].css'
     }),
     new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify('production')
+      'process.env.NODE_ENV': JSON.stringify('production'),
+      CESIUM_BASE_URL: JSON.stringify('.')
     }),
     new webpack.ProgressPlugin(function (percentage, message, ...args) {
     //   console.info(message + (percentage * 100).toFixed(2) + '%' + '. ' + args.join(','))
-    })
+    }),
+    new CopywebpackPlugin([{ from: path.join(cesiumSource, cesiumWorkers), to: './Workers' }]),
+    new CopywebpackPlugin([{ from: path.join('node_modules/cesium/Build/Cesium/ThirdParty', './'), to: './ThirdParty' }]),
+    new CopywebpackPlugin([{ from: path.join(cesiumSource, 'Assets'), to: './Assets' }]),
+    new CopywebpackPlugin([{ from: path.join(cesiumSource, 'Widgets'), to: './Widgets' }])
   ],
   resolve: {
     extensions: ['.js', '.jsx'],
     alias: {
-      '@': path.resolve(__dirname, '../src')
+      '@': path.resolve(__dirname, '../src'),
+      cesium: path.resolve(cesiumSource)
     }
   }
 }
