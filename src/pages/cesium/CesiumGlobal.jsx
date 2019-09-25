@@ -14,7 +14,10 @@ export default class CesiumGlobal extends Component {
   componentDidMount () {
     this.viewer = new Cesium.Viewer('map', {
       timeline: false,
-      vrButton: false
+      vrButton: false,
+      imageryProvider: new Cesium.UrlTemplateImageryProvider({
+        url: 'https://mt2.google.cn/vt/lyrs=y&hl=zh-CN&gl=cn&x={x}&y={y}&z={z}'
+      })
     })
 
     this.viewer.camera.setView({
