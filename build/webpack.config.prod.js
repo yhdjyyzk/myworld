@@ -15,7 +15,7 @@ module.exports = {
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, '../dist/myworld'),
-    publicPath: '/myworld'
+    publicPath: '/myworld/'
   },
   amd: {
     // Enable webpack-friendly use of require in Cesium
