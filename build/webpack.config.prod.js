@@ -9,7 +9,7 @@ const cesiumSource = 'node_modules/cesium/Source'
 const cesiumWorkers = '../Build/Cesium/Workers'
 
 module.exports = {
-  devtool: 'source-map',
+  devtool: false,
   mode: 'production',
   entry: './src/index.js',
   output: {
