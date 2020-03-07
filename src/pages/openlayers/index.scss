@@ -1,10 +1,14 @@
-.openlayers-map {
+.map-container {
   height: 100%;
-}
 
-.my-ol-zoom {
-  bottom: 0.5em;
-  right: 0.5em;
+  .openlayers-map {
+    height: 100%;
+  }
+
+  .my-ol-zoom {
+    bottom: 0.5em;
+    right: 0.5em;
+  }
 }
 
 .ol-zoomslider {
