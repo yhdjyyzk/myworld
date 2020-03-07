@@ -3,6 +3,7 @@ import Map from 'ol/Map'
 import View from 'ol/View'
 import TileLayer from 'ol/layer/Tile'
 import XYZ from 'ol/source/XYZ'
+import { defaults as defaultControls, ScaleLine, Zoom, FullScreen, ZoomSlider } from 'ol/control'
 import * as proj from 'ol/proj'
 import 'ol/ol.css'
 import './index.scss'
@@ -16,6 +17,17 @@ export default class OpenLayersMap extends Component {
   componentDidMount () {
     this.map = new Map({
       target: 'map',
+      controls: defaultControls({
+        zoomOptions: {
+          className: 'my-ol-zoom'
+        }
+      }).extend([
+        new ScaleLine({
+          units: 'metric'
+        }),
+        new FullScreen(),
+        new ZoomSlider({})
+      ]),
       layers: [
         new TileLayer({
           source: new XYZ({

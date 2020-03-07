@@ -1,3 +1,28 @@
 .openlayers-map {
   height: 100%;
 }
+
+.my-ol-zoom {
+  bottom: 0.5em;
+  right: 0.5em;
+}
+
+.ol-zoomslider {
+  left: auto;
+  top: auto;
+  bottom: 4.5em;
+  right: .5em;
+  width: 1.675em;
+  height: 200px;
+  padding: 2px;
+  font-size: 1.14em
+}
+
+
+.ol-zoomslider-thumb {
+  font-size: 1.14em;
+  height: 1.375em;
+  width: 1.375em;
+  right: .15em;
+  margin: 1px;
+}
