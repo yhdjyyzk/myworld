@@ -25,7 +25,7 @@ export default class AddressSearch extends PureComponent {
   render () {
     const { loading, address } = this.state
     return <div className="address-search">
-      <Dropdown overlay={this.renderList()}>
+      <Dropdown overlay={this.renderList()} visible={true}>
         <Search value={address} onSearch={this.onSearch} onChange={this.onChange} loading={loading} allowClear />
       </Dropdown>
     </div>
@@ -39,7 +39,7 @@ export default class AddressSearch extends PureComponent {
       forwardGeocoding(value).then(res => {
         if (res.features) {
           this.setState({
-            result: res.features
+            result: [...res.features]
           })
         }
         this.setState({
@@ -60,6 +60,10 @@ export default class AddressSearch extends PureComponent {
     })
 
     if (e.target.value === '') {
+      this.setState({
+        loading: false,
+        result: []
+      })
       this.props.onClear()
     }
   }
