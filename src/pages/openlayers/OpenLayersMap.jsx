@@ -42,7 +42,7 @@ export default class OpenLayersMap extends Component {
       layers: [
         new TileLayer({
           source: new XYZ({
-            url: 'https://mt2.google.cn/vt/lyrs=y&hl=zh-CN&gl=cn&x={x}&y={y}&z={z}'
+            url: 'https://mt{0-3}.google.cn/vt/lyrs=y&hl=zh-CN&gl=cn&x={x}&y={y}&z={z}'
           })
         })
       ],
