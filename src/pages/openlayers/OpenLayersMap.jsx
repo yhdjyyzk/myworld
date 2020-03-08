@@ -1,4 +1,8 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
+// antd
+import { Select } from 'antd'
+
+// ol
 import Map from 'ol/Map'
 import View from 'ol/View'
 import TileLayer from 'ol/layer/Tile'
@@ -11,21 +15,63 @@ import VectorLayer from 'ol/layer/Vector'
 import Feature from 'ol/Feature'
 import Point from 'ol/geom/Point'
 import 'ol/ol.css'
+
+// custom
+import AddressSearch from '../../component/AddressSearch'
 import './index.scss'
 import posImg from '../../assets/position.png'
 
-import AddressSearch from '../../component/AddressSearch'
+const { Option } = Select
 
-export default class OpenLayersMap extends Component {
+// 地图风格
+const mapStyle = [
+  {
+    name: '街道',
+    s: 'm'
+  },
+  {
+    name: '带地形街道',
+    s: 'p'
+  },
+  {
+    name: '不带地形街道',
+    s: 'r'
+  },
+  {
+    name: '无标注卫星地图',
+    s: 's'
+  },
+  {
+    name: '地形图',
+    s: 't'
+  },
+  {
+    name: '有标注卫星地图',
+    s: 'y'
+  }
+]
+
+const defaultStyle = 'y'
+
+/**
+ * OpenLayers 加载地图的组件
+ */
+export default class OpenLayersMap extends PureComponent {
   constructor (props) {
     super(props)
     this.el = React.createRef()
 
     this.onSelectPlace = this.onSelectPlace.bind(this)
     this.onClear = this.onClear.bind(this)
+    this.onSelectStyle = this.onSelectStyle.bind(this)
   }
 
   componentDidMount () {
+    this.tileLayer = new TileLayer({
+      source: new XYZ({
+        url: this.getMapUrl(defaultStyle)
+      })
+    })
     this.map = new Map({
       target: 'map',
       controls: defaultControls({
@@ -40,11 +86,7 @@ export default class OpenLayersMap extends Component {
         new ZoomSlider({})
       ]),
       layers: [
-        new TileLayer({
-          source: new XYZ({
-            url: 'https://mt{0-3}.google.cn/vt/lyrs=y&hl=zh-CN&gl=cn&x={x}&y={y}&z={z}'
-          })
-        })
+        this.tileLayer
       ],
       view: new View({
         center: proj.fromLonLat([116.5, 39]),
@@ -64,7 +106,16 @@ export default class OpenLayersMap extends Component {
     return (
       <div className="map-container">
         <div id="map" ref={this.el} className="openlayers-map"></div>
-        <AddressSearch onSelectPlace={this.onSelectPlace} onClear={this.onClear}/>
+        <div className='header'>
+          <AddressSearch onSelectPlace={this.onSelectPlace} onClear={this.onClear} />
+          <Select defaultValue={defaultStyle} style={{ width: '160px' }} onChange={this.onSelectStyle}>
+            {
+              mapStyle.map(item => {
+                return <Option value={item.s} key={item.s}>{item.name}</Option>
+              })
+            }
+          </Select>
+        </div>
       </div>
     )
   }
@@ -101,5 +152,22 @@ export default class OpenLayersMap extends Component {
    */
   onClear () {
     this.vectorSource.clear()
+  }
+
+  /**
+   * 设置地图的风格
+   * @param {String} value 地图style
+   */
+  onSelectStyle (value) {
+    this.tileLayer.getSource().setUrl(this.getMapUrl(value))
+  }
+
+  // -----------
+  /**
+   * 生成地图的url
+   * @param {Style}} style
+   */
+  getMapUrl (style) {
+    return `https://mt{0-3}.google.cn/vt/lyrs=${style}&hl=zh-CN&gl=cn&x={x}&y={y}&z={z}`
   }
 }

@@ -1,6 +1,17 @@
 .map-container {
   height: 100%;
 
+  .header {
+    display: flex;
+    position: absolute;
+    top: .5em;
+    left: .5em;
+
+    > * {
+      margin: 0px 5px;
+    }
+  }
+
   .openlayers-map {
     height: 100%;
   }
