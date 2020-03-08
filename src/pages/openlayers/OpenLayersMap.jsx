@@ -20,6 +20,7 @@ import 'ol/ol.css'
 import AddressSearch from '../../component/AddressSearch'
 import './index.scss'
 import posImg from '../../assets/position.png'
+import Polygon from 'ol/geom/Polygon'
 
 const { Option } = Select
 
@@ -126,11 +127,17 @@ export default class OpenLayersMap extends PureComponent {
    */
   onSelectPlace (item) {
     if (item) {
-      this.map.getView().animate({
-        duration: 1200,
-        center: proj.fromLonLat(item.center),
-        zoom: 16
-      })
+      if (item.bbox) {
+        const start = proj.fromLonLat([item.bbox[0], item.bbox[1]])
+        const end = proj.fromLonLat([item.bbox[2], item.bbox[3]])
+        this.map.getView().fit([...start, ...end])
+      } else {
+        this.map.getView().animate({
+          duration: 1200,
+          center: proj.fromLonLat(item.center),
+          zoom: 16
+        })
+      }
 
       const point = new Feature({
         geometry: new Point(proj.fromLonLat(item.center))
