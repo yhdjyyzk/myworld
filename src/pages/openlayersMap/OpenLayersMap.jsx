@@ -20,7 +20,6 @@ import 'ol/ol.css'
 import AddressSearch from '../../component/AddressSearch'
 import './index.scss'
 import posImg from '../../assets/position.png'
-import Polygon from 'ol/geom/Polygon'
 
 const { Option } = Select
 
