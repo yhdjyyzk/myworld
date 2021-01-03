@@ -2,9 +2,9 @@ import React, { Component } from 'react'
 import { Route, Switch } from 'react-router-dom'
 import { asyncComponent } from '../component/common/AsyncComponent'
 
-const CesiumGlobal = asyncComponent(() => import('../pages/cesium/CesiumGlobal'))
-const LeafletMap = asyncComponent(() => import('../pages/leaflet/LeafletMap'))
-const OpenLayersMap = asyncComponent(() => import('../pages/openlayers/OpenLayersMap'))
+const CesiumGlobal = asyncComponent(() => import('../pages/cesiumMap/CesiumGlobal'))
+const LeafletMap = asyncComponent(() => import('../pages/leafletMap/LeafletMap'))
+const OpenLayersMap = asyncComponent(() => import('../pages/openlayersMap/OpenLayersMap'))
 
 export default class Router extends Component {
   render () {

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import Cesium from 'cesium/Cesium'
+import * as Cesium from 'cesium/Cesium'
 import 'cesium/Widgets/widgets.css'
 import './cesiumGlobal.scss'
 
